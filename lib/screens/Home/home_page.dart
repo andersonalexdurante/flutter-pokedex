@@ -1,8 +1,24 @@
+import 'package:first_app/Models/poke_api.dart';
 import 'package:first_app/consts/consts.dart';
 import 'package:first_app/screens/Home/Widgets/app_bar.dart';
+import 'package:first_app/stores/pokeapi_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  PokeAPIStore pokeAPIStore;
+  @override
+  void initState() {
+    super.initState();
+    pokeAPIStore = PokeAPIStore();
+    pokeAPIStore.fetchPokemonList();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -25,7 +41,25 @@ class HomePage extends StatelessWidget {
               Container(
                 height: statusBar,
               ),
-              AppHeader()
+              AppHeader(),
+              Expanded(
+                child: Container(child: Observer(
+                  builder: (BuildContext context) {
+                    PokeAPI _pokeAPI = pokeAPIStore.pokeAPI;
+                    return (_pokeAPI != null)
+                        ? ListView.builder(
+                            itemCount: _pokeAPI.pokemon.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                  title: Text(_pokeAPI.pokemon[index].name));
+                            },
+                          )
+                        : Center(
+                            child: CircularProgressIndicator(),
+                          );
+                  },
+                )),
+              )
             ]),
           )
         ]));
