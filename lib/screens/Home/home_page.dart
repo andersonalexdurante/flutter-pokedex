@@ -4,6 +4,7 @@ import 'package:first_app/screens/Home/Widgets/app_bar.dart';
 import 'package:first_app/stores/pokeapi_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -47,12 +48,31 @@ class _HomePageState extends State<HomePage> {
                   builder: (BuildContext context) {
                     PokeAPI _pokeAPI = pokeAPIStore.pokeAPI;
                     return (_pokeAPI != null)
-                        ? ListView.builder(
-                            itemCount: _pokeAPI.pokemon.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                  title: Text(_pokeAPI.pokemon[index].name));
-                            },
+                        ? AnimationLimiter(
+                            child: GridView.builder(
+                                physics: BouncingScrollPhysics(),
+                                padding: EdgeInsets.all(12),
+                                addAutomaticKeepAlives: true,
+                                gridDelegate:
+                                    new SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2),
+                                itemCount: _pokeAPI.pokemon.length,
+                                itemBuilder: (context, index) {
+                                  return AnimationConfiguration.staggeredGrid(
+                                    position: index,
+                                    duration: const Duration(milliseconds: 375),
+                                    columnCount: 2,
+                                    child: ScaleAnimation(
+                                      child: GestureDetector(
+                                        child: Padding(
+                                          padding: EdgeInsets.all(5),
+                                          child: Container(color: Colors.red),
+                                        ),
+                                        onTap: () {},
+                                      ),
+                                    ),
+                                  );
+                                }),
                           )
                         : Center(
                             child: CircularProgressIndicator(),

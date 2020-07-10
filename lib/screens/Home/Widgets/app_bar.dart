@@ -25,7 +25,7 @@ class AppHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(left: 20),
+                padding: const EdgeInsets.only(left: 15),
                 child: Text(
                   'Pokedex',
                   style: TextStyle(
