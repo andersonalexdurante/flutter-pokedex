@@ -47,6 +47,17 @@ mixin _$PokeAPIStore on _PokeAPIStoreBase, Store {
   }
 
   @override
+  dynamic getPokemon(int index) {
+    final _$actionInfo = _$_PokeAPIStoreBaseActionController.startAction(
+        name: '_PokeAPIStoreBase.getPokemon');
+    try {
+      return super.getPokemon(index);
+    } finally {
+      _$_PokeAPIStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 pokeAPI: ${pokeAPI}

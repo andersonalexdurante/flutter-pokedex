@@ -1,6 +1,7 @@
 import 'package:first_app/Models/poke_api.dart';
 import 'package:first_app/consts/consts.dart';
 import 'package:first_app/screens/Home/Widgets/app_bar.dart';
+import 'package:first_app/screens/Home/Widgets/poke_item.dart';
 import 'package:first_app/stores/pokeapi_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -51,22 +52,26 @@ class _HomePageState extends State<HomePage> {
                         ? AnimationLimiter(
                             child: GridView.builder(
                                 physics: BouncingScrollPhysics(),
-                                padding: EdgeInsets.all(12),
+                                padding: EdgeInsets.all(8),
                                 addAutomaticKeepAlives: true,
                                 gridDelegate:
                                     new SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2),
                                 itemCount: _pokeAPI.pokemon.length,
                                 itemBuilder: (context, index) {
+                                  Pokemon pokemon =
+                                      pokeAPIStore.getPokemon(index);
                                   return AnimationConfiguration.staggeredGrid(
                                     position: index,
                                     duration: const Duration(milliseconds: 375),
                                     columnCount: 2,
                                     child: ScaleAnimation(
                                       child: GestureDetector(
-                                        child: Padding(
-                                          padding: EdgeInsets.all(5),
-                                          child: Container(color: Colors.red),
+                                        child: PokeItem(
+                                          index: index,
+                                          name: pokemon.name,
+                                          types: pokemon.type,
+                                          num: pokemon.num,
                                         ),
                                         onTap: () {},
                                       ),

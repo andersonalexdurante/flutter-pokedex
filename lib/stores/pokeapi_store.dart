@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:first_app/Models/poke_api.dart';
 import 'package:first_app/consts/consts_api.dart';
 import 'package:mobx/mobx.dart';
@@ -21,6 +20,11 @@ abstract class _PokeAPIStoreBase with Store {
     loadPokeAPI().then((pokeList) {
       _pokeAPI = pokeList;
     });
+  }
+
+  @action
+  getPokemon(int index) {
+    return _pokeAPI.pokemon[index];
   }
 
   Future<PokeAPI> loadPokeAPI() async {
