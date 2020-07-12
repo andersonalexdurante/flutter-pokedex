@@ -98,8 +98,8 @@ class PokeItem extends StatelessWidget {
                     opacity: 0.2,
                     child: Image.asset(
                       AppConsts.whitePokeball,
-                      height: 105,
-                      width: 105,
+                      height: 95,
+                      width: 95,
                     )),
               ),
               Align(
@@ -108,8 +108,8 @@ class PokeItem extends StatelessWidget {
                   placeholder: (context, url) => Container(
                     color: Colors.transparent,
                   ),
-                  height: 100,
-                  width: 100,
+                  height: 90,
+                  width: 90,
                   imageUrl:
                       'https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/images/$num.png',
                 ),
