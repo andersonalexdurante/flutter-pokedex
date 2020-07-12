@@ -2,30 +2,22 @@ import 'package:first_app/Models/poke_api.dart';
 import 'package:first_app/consts/consts.dart';
 import 'package:first_app/screens/Home/Widgets/app_bar.dart';
 import 'package:first_app/screens/Home/Widgets/poke_item.dart';
+import 'package:first_app/screens/PokeDetail/detail_page.dart';
 import 'package:first_app/stores/pokeapi_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  PokeAPIStore pokeAPIStore;
-  @override
-  void initState() {
-    super.initState();
-    pokeAPIStore = PokeAPIStore();
-    pokeAPIStore.fetchPokemonList();
-  }
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double statusBar = MediaQuery.of(context).padding.top;
-
+    final _pokemonStore = Provider.of<PokeAPIStore>(context);
+    if (_pokemonStore.pokeAPI == null) {
+      _pokemonStore.fetchPokemonList();
+    }
     return Scaffold(
         backgroundColor: Colors.white,
         body: Stack(overflow: Overflow.visible, children: <Widget>[
@@ -47,7 +39,7 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: Container(child: Observer(
                   builder: (BuildContext context) {
-                    PokeAPI _pokeAPI = pokeAPIStore.pokeAPI;
+                    PokeAPI _pokeAPI = _pokemonStore.pokeAPI;
                     return (_pokeAPI != null)
                         ? AnimationLimiter(
                             child: GridView.builder(
@@ -60,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                                 itemCount: _pokeAPI.pokemon.length,
                                 itemBuilder: (context, index) {
                                   Pokemon pokemon =
-                                      pokeAPIStore.getPokemon(index);
+                                      _pokemonStore.getPokemon(index: index);
                                   return AnimationConfiguration.staggeredGrid(
                                     position: index,
                                     duration: const Duration(milliseconds: 375),
@@ -73,7 +65,17 @@ class _HomePageState extends State<HomePage> {
                                           types: pokemon.type,
                                           num: pokemon.num,
                                         ),
-                                        onTap: () {},
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        PokeDetailPage(
+                                                            index: index),
+                                                fullscreenDialog: true,
+                                              ));
+                                        },
                                       ),
                                     ),
                                   );
