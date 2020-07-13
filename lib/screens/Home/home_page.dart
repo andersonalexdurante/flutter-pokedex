@@ -66,6 +66,8 @@ class HomePage extends StatelessWidget {
                                           num: pokemon.num,
                                         ),
                                         onTap: () {
+                                          _pokemonStore.setPokemonAtual(
+                                              index: index);
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
