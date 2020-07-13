@@ -1,20 +1,33 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:first_app/Models/poke_api.dart';
-import 'package:first_app/consts/consts.dart';
 import 'package:first_app/stores/pokeapi_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
-class PokeDetailPage extends StatelessWidget {
+class PokeDetailPage extends StatefulWidget {
   final int index;
 
   const PokeDetailPage({Key key, this.index}) : super(key: key);
 
   @override
+  _PokeDetailPageState createState() => _PokeDetailPageState();
+}
+
+class _PokeDetailPageState extends State<PokeDetailPage> {
+  PageController _pageController;
+  PokeAPIStore _pokemonStore;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: widget.index);
+    _pokemonStore = GetIt.instance<PokeAPIStore>();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final _pokemonStore = Provider.of<PokeAPIStore>(context);
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50),
@@ -40,8 +53,7 @@ class PokeDetailPage extends StatelessWidget {
                   IconButton(
                       icon: Icon(Icons.favorite_border), onPressed: () {}),
                 ],
-                backgroundColor: AppConsts.getColorType(
-                    type: _pokemonStore.getPokemonAtual.type[0]),
+                backgroundColor: _pokemonStore.corPokemonAtual,
                 elevation: 0,
               );
             },
@@ -52,8 +64,7 @@ class PokeDetailPage extends StatelessWidget {
             Observer(
               builder: (BuildContext context) {
                 return Container(
-                  color: AppConsts.getColorType(
-                      type: _pokemonStore.getPokemonAtual.type[0]),
+                  color: _pokemonStore.corPokemonAtual,
                 );
               },
             ),
@@ -80,6 +91,7 @@ class PokeDetailPage extends StatelessWidget {
               child: SizedBox(
                 height: 150,
                 child: PageView.builder(
+                    controller: _pageController,
                     onPageChanged: (index) {
                       _pokemonStore.setPokemonAtual(index: index);
                     },

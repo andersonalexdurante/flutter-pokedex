@@ -7,17 +7,28 @@ import 'package:first_app/stores/pokeapi_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  PokeAPIStore _pokemonStore;
+  @override
+  void initState() {
+    super.initState();
+    _pokemonStore = GetIt.instance<PokeAPIStore>();
+    if (_pokemonStore.pokeAPI == null) {
+      _pokemonStore.fetchPokemonList();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double statusBar = MediaQuery.of(context).padding.top;
-    final _pokemonStore = Provider.of<PokeAPIStore>(context);
-    if (_pokemonStore.pokeAPI == null) {
-      _pokemonStore.fetchPokemonList();
-    }
     return Scaffold(
         backgroundColor: Colors.white,
         body: Stack(overflow: Overflow.visible, children: <Widget>[

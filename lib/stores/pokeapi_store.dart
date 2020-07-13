@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:first_app/Models/poke_api.dart';
+import 'package:first_app/consts/consts.dart';
 import 'package:first_app/consts/consts_api.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:http/http.dart' as http;
 part 'pokeapi_store.g.dart';
@@ -13,6 +15,9 @@ abstract class _PokeAPIStoreBase with Store {
 
   @observable
   Pokemon _pokemonAtual;
+
+  @observable
+  Color corPokemonAtual;
 
   @computed
   PokeAPI get pokeAPI => _pokeAPI;
@@ -28,8 +33,7 @@ abstract class _PokeAPIStoreBase with Store {
     });
   }
 
-  @action
-  getPokemon({int index}) {
+  Pokemon getPokemon({int index}) {
     return _pokeAPI.pokemon[index];
   }
 
@@ -40,6 +44,7 @@ abstract class _PokeAPIStoreBase with Store {
   @action
   setPokemonAtual({int index}) {
     _pokemonAtual = _pokeAPI.pokemon[index];
+    corPokemonAtual = AppConsts.getColorType(type: _pokemonAtual.type[0]);
   }
 
   Future<PokeAPI> loadPokeAPI() async {

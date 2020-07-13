@@ -54,6 +54,21 @@ mixin _$PokeAPIStore on _PokeAPIStoreBase, Store {
     });
   }
 
+  final _$corPokemonAtualAtom = Atom(name: '_PokeAPIStoreBase.corPokemonAtual');
+
+  @override
+  Color get corPokemonAtual {
+    _$corPokemonAtualAtom.reportRead();
+    return super.corPokemonAtual;
+  }
+
+  @override
+  set corPokemonAtual(Color value) {
+    _$corPokemonAtualAtom.reportWrite(value, super.corPokemonAtual, () {
+      super.corPokemonAtual = value;
+    });
+  }
+
   final _$_PokeAPIStoreBaseActionController =
       ActionController(name: '_PokeAPIStoreBase');
 
@@ -63,17 +78,6 @@ mixin _$PokeAPIStore on _PokeAPIStoreBase, Store {
         name: '_PokeAPIStoreBase.fetchPokemonList');
     try {
       return super.fetchPokemonList();
-    } finally {
-      _$_PokeAPIStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic getPokemon({int index}) {
-    final _$actionInfo = _$_PokeAPIStoreBaseActionController.startAction(
-        name: '_PokeAPIStoreBase.getPokemon');
-    try {
-      return super.getPokemon(index: index);
     } finally {
       _$_PokeAPIStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -93,6 +97,7 @@ mixin _$PokeAPIStore on _PokeAPIStoreBase, Store {
   @override
   String toString() {
     return '''
+corPokemonAtual: ${corPokemonAtual},
 pokeAPI: ${pokeAPI},
 pokemonAtual: ${pokemonAtual}
     ''';
